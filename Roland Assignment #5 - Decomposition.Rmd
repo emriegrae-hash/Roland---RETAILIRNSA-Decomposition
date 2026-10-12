@@ -1,0 +1,38 @@
+---
+title: "RETAILIRNSA Decomposition"
+author: "Roland"
+date: "2026-10-11"
+output: html_document
+
+---
+
+```{r}
+library(fpp2)
+
+RETAILIRNSA <- read.csv("RETAILIRNSA.csv")
+retail <- ts(RETAILIRNSA$RETAILIRNSA, start = c(1992, 1), frequency = 12)
+
+head(retail)
+plot(retail)
+stl_decomp <- stl(retail,s.window ="periodic")
+plot(stl_decomp)
+attributes(stl_decomp)
+
+# Lets print out a seasonal adjustment
+seasadj(stl_decomp)
+# Plot a line on the graph
+plot(retail)
+lines(seasadj(stl_decomp), col="Red")
+# Default period forecast
+f_stl <- forecast(stl_decomp)
+# you can pass the # of period
+f_stl <- forecast(stl_decomp,h=15)
+f_stl
+plot(f_stl)
+# There is more than one way to do things
+decomp_retail <- decompose(retail)
+
+# Each one shows different attributes 
+attributes(decomp_retail)
+seasadj(decomp_retail)
+```
